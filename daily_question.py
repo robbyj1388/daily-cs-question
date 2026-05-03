@@ -1,6 +1,23 @@
-import requests, random, html 
+import sys, requests, random, html, datetime
 
 choices = {}
+
+# --- CHECK DATE --- 
+# Get current date as str
+today = datetime.datetime.now().strftime("%d-%b-%Y")
+
+# Create/read file
+with open("daily-question.txt", 'r+') as f:
+    last_date_answered = f.read()
+
+    # Check if dates match
+    if (last_date_answered == '' or last_date_answered != today):
+        print("QUESTION TIME!")
+        print(last_date_answered)
+        f.write(today)
+    elif (last_date_answered == today): # already answered question
+        print("Daily question already answered!")
+        sys.exit()
 
 # Make the API call
 response = requests.get('https://opentdb.com/api.php?amount=1')
@@ -47,3 +64,8 @@ else:
     else:
         print("WRONG.")
 print(f'Answer is {correct_answer}')
+
+
+
+
+
