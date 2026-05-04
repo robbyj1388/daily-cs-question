@@ -20,7 +20,7 @@ with open("daily-question.txt", 'r+') as f:
         sys.exit()
 
 # Make the API call
-response = requests.get('https://opentdb.com/api.php?amount=1')
+response = requests.get('https://opentdb.com/api.php?amount=1&category=18')
 
 # Check if the request was successful
 if response.status_code == 200:
