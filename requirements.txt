@@ -1,0 +1,2 @@
+# Requirements for src/__main__.py
+requests

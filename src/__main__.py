@@ -1,19 +1,26 @@
-import sys, requests, random, html, datetime
+import os, sys, requests, random, html, datetime
 
 choices = {}
 
 # --- CHECK DATE --- 
 # Get current date as str
 today = datetime.datetime.now().strftime("%d-%b-%Y")
-
+filepath = os.path.expanduser("~/.local/state/daily-question/daily-question.txt")
+# Create dir if not one
+directory = os.path.dirname(filepath)
+if directory and not os.path.exists(directory):
+    os.makedirs(directory)
 # Create/read file
-with open("daily-question.txt", 'r+') as f:
+with open(filepath, 'a+') as f:
+    f.seek(0)
     last_date_answered = f.read()
 
     # Check if dates match
     if (last_date_answered == '' or last_date_answered != today):
         print("QUESTION TIME!")
         print(last_date_answered)
+        f.seek(0)
+        f.truncate()
         f.write(today)
     elif (last_date_answered == today): # already answered question
         print("Daily question already answered!")
