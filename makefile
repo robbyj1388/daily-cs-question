@@ -4,7 +4,7 @@ SCRIPT_PATH := $(CURDIR)/src/$(FILE_NAME)
 BASHRC := $(HOME)/.bashrc
 INSTALL_DIR := $(HOME)/.local/bin
 VENV_NAME := .venv
-VENV_DIR := $(HOME)/.local/state/daily_question
+VENV_DIR := $(HOME)/.local/state/daily-question
 VENV_PATH := $(VENV_DIR)/$(VENV_NAME)/bin/python
 
 .PHONY: install
