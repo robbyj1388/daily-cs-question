@@ -32,12 +32,10 @@ with open(filepath, 'a+') as f:
             ░╚═██╔═╝░╚██████╔╝███████╗██████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║██╗
             ░░░╚═╝░░░░╚═════╝░╚══════╝╚═════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═╝
               """)
-        print(last_date_answered)
         f.seek(0)
         f.truncate()
         f.write(today)
     elif (last_date_answered == today): # already answered question
-        print("Daily question already answered!")
         sys.exit()
 
 # Make the API call
