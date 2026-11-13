@@ -11,7 +11,8 @@ def format_answer_choices(raw_answer_choices):
     random.shuffle(raw_answer_choices)
     for i in range(0, len(raw_answer_choices)):
         choices[chr(97 + i)] = raw_answer_choices[i] # 97 = 'a' + i for next ascii char
-        # Print out answer choices
+
+    # Print out answer choices
     keys = choices.keys()
     values = choices.values()
     for key, value in choices.items():
@@ -26,7 +27,8 @@ def main():
     directory = os.path.dirname(filepath)
     if directory and not os.path.exists(directory):
         os.makedirs(directory)
-# Create/read file
+
+    # Create/read file
     with open(filepath, 'a+') as f:
         f.seek(0)
         last_date_answered = f.read()
@@ -105,7 +107,7 @@ def main():
         user_answer = user_answer.lower()[0] # Get first letter of answer
 
         # Check for valid input
-        if not (user_answer in choices.values()):
+        if not (user_answer in choices.keys()):
             print("INVALID INPUT.")
             print(f'Answer is {correct_answer}')
             sys.exit()
