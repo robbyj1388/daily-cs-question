@@ -2,6 +2,21 @@ import os, sys, requests, random, html, datetime
 
 choices = {}
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def format_answer_choices(raw_answer_choices):
+    global choices
+    # Randomize raw answer choices order
+    random.shuffle(raw_answer_choices)
+    for i in range(0, len(raw_answer_choices)):
+        choices[chr(97 + i)] = raw_answer_choices[i] # 97 = 'a' + i for next ascii char
+        # Print out answer choices
+    keys = choices.keys()
+    values = choices.values()
+    for key, value in choices.items():
+        print(f'{key}: {value}')
+
 def main():
     # --- CHECK DATE --- 
     # Get current date as str
@@ -18,6 +33,8 @@ def main():
 
         # Check if dates match
         if (last_date_answered == '' or last_date_answered != today):
+            # Clean up screen for print out.
+            clear_terminal()
             print("""
                 ██████╗░░█████╗░██╗██╗░░░░░██╗░░░██╗  ░█████╗░░██████╗
                 ██╔══██╗██╔══██╗██║██║░░░░░╚██╗░██╔╝  ██╔══██╗██╔════╝
@@ -39,10 +56,10 @@ def main():
         elif (last_date_answered == today): # already answered question
             sys.exit()
 
-# Make the API call
+    # Make the API call
     response = requests.get('https://opentdb.com/api.php?amount=1&category=18')
 
-# Check if the request was successful
+    # Check if the request was successful
     if response.status_code == 200:
         data = response.json()['results'][0]
         question = html.unescape(data['question'])
@@ -52,33 +69,47 @@ def main():
         print(f"Error: {response.status_code}")
 
 
-    def format_answer_choices():
-        global choices
-        # Randomize raw answer choices order
-        random.shuffle(raw_answer_choices)
-        for i in range(0, len(raw_answer_choices)):
-            choices[chr(97 + i)] = raw_answer_choices[i] # 97 = 'a' + i for next ascii char
-        # Print out answer choices
-        keys = choices.keys()
-        values = choices.values()
-        for key, value in choices.items():
-            print(f'{key}: {value}')
 
-# --- MAIN PRINT OUTS ---  
+    # --- MAIN PRINT OUTS ---  
     if (data['type'] == 'boolean'):
         print("True or False: ")
         print(question)
         # Get and parse user input
-        user_answer = input("T or F? ").lower()[0] # Get first letter of answer
+        
+        user_answer = input("T or F? ")
+
+        # Check for no input
+        if not user_answer:
+            print("INVALID INPUT.")
+            print(f'Answer is {correct_answer}')
+            sys.exit()
+
+        user_answer = user_answer.lower()[0] # Get first letter of answer
+
         if user_answer == 't' and correct_answer == 'True':
             print("CORRECT!")
         else:
             print("WRONG.")
     else:
         print(question)
-        format_answer_choices()
+        format_answer_choices(raw_answer_choices)
         # Get and parse user input
-        user_answer = input("a, b, c, or d? ").lower()[0] # Get first letter of answer
+        user_answer = input("a, b, c, or d? ")
+
+        # Check for no input
+        if not user_answer:
+            print("INVALID INPUT.")
+            print(f'Answer is {correct_answer}')
+            sys.exit()
+
+        user_answer = user_answer.lower()[0] # Get first letter of answer
+
+        # Check for valid input
+        if not (user_answer in choices.values()):
+            print("INVALID INPUT.")
+            print(f'Answer is {correct_answer}')
+            sys.exit()
+
         if choices[user_answer] == correct_answer:
             print("CORRECT!")
         else:
@@ -90,6 +121,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("\nShutdown requested... exiting")
-
 
 
